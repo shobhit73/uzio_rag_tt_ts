@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# VS Code
+.vscode/
+
+# Project specific
+chroma_db/
+chroma.sqlite3
+data/images/
+.gemini/
+.agent/
+logs/
+extracted_data/
+
+# OS
+.DS_Store
+Thumbs.db
