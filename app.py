@@ -26,23 +26,67 @@ st.set_page_config(
 # Custom CSS for Professional Look
 st.markdown("""
 <style>
+    /* Global Font & Theme */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    html, body, [class*="st-"] {
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* Reduce general font size for professional look */
+    .stMarkdown, p, div {
+        font-size: 15px !important;
+        color: #1A202C; /* Darker grey for text */
+    }
+
+    h1, h2, h3 {
+        color: #2b6cb0; /* UZIO-like Blue */
+        font-weight: 700;
+    }
+
+    /* Chat Message Bubbles */
+    .stChatMessage {
+        padding: 1rem;
+        border-radius: 12px;
+        margin-bottom: 10px;
+        border: 1px solid #E2E8F0;
+    }
+
+    [data-testid="stChatMessage"]:nth-child(2n+1) {
+        background-color: #F7FAFC; /* Assistant bubble light grey */
+    }
+
+    [data-testid="stChatMessage"]:nth-child(2n) {
+        background-color: #EBF8FF; /* User bubble light blue tone */
+        border-color: #BEE3F8;
+    }
+    
+    /* Button Styling */
+    .stButton button {
+        width: 100%;
+        border-radius: 6px;
+        height: 2.8em;
+        background-color: #3182CE; /* UZIO Blue */
+        color: white;
+        font-weight: 500;
+        border: none;
+    }
+    .stButton button:hover {
+        background-color: #2C5282;
+        color: white;
+    }
+
+    /* Input Box */
     .stChatInput {
         padding-bottom: 20px;
     }
-    .stButton button {
-        width: 100%;
-        border-radius: 8px;
-        height: 3em;
-    }
-    h1 {
-        font-family: 'Inter', sans-serif;
-        font-weight: 700;
-        color: #2D3748;
-    }
+    
+    /* Expander styling */
     .stExpander {
-        background-color: #F7FAFC;
+        background-color: #FFFFFF;
         border-radius: 8px;
         border: 1px solid #E2E8F0;
+        font-size: 14px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -65,7 +109,10 @@ def load_index():
 
 # Sidebar
 with st.sidebar:
-    st.title("🤖 UZIO Assistant")
+    # UZIO Logo
+    st.image("https://uzio.com/wp-content/uploads/2017/09/logo.png", width=180)
+    st.write("") # Spacer
+    st.markdown("### **AI Support Assistant**")
     st.markdown("**Powered by Gemini 2.0 Flash**")
     st.markdown("---")
     st.markdown("Use this assistant to quickly find answers about UZIO Scheduling and Time Tracking modules.")
