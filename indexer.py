@@ -1,9 +1,9 @@
 import os
 import json
 from llama_index.core import Document, VectorStoreIndex, StorageContext, Settings
-from llama_index.embeddings.gemini import GeminiEmbedding
+from llama_index.embeddings.google_genai import GoogleGenAIEmbedding
 from llama_index.vector_stores.chroma import ChromaVectorStore
-from llama_index.llms.gemini import Gemini
+from llama_index.llms.google_genai import GoogleGenAI
 import chromadb
 from dotenv import load_dotenv
 
@@ -22,8 +22,8 @@ def build_index():
 
     # 1. Setup Models
     # Using text-embedding-004 for cost/performance if available, else 001
-    Settings.embed_model = GeminiEmbedding(model_name="models/text-embedding-004", api_key=GOOGLE_API_KEY)
-    Settings.llm = Gemini(model="models/gemini-2.0-flash-001", api_key=GOOGLE_API_KEY)
+    Settings.embed_model = GoogleGenAIEmbedding(model_name="models/text-embedding-004", api_key=GOOGLE_API_KEY)
+    Settings.llm = GoogleGenAI(model="models/gemini-2.0-flash-001", api_key=GOOGLE_API_KEY)
 
     # 2. Prepare Documents
     with open(ENRICHED_DATA_FILE, "r") as f:
