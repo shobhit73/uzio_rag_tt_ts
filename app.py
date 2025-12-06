@@ -2,8 +2,8 @@ import streamlit as st
 import os
 from llama_index.core import VectorStoreIndex, StorageContext, Settings
 from llama_index.vector_stores.chroma import ChromaVectorStore
-from llama_index.llms.gemini import Gemini
-from llama_index.embeddings.gemini import GeminiEmbedding
+from llama_index.llms.google_genai import GoogleGenerativeAI
+from llama_index.embeddings.google_genai import GoogleGenerativeAIEmbedding
 import chromadb
 from dotenv import load_dotenv
 
@@ -103,8 +103,8 @@ def load_index():
         return None
     
     # Setup Models
-    Settings.embed_model = GeminiEmbedding(model_name="models/text-embedding-004", api_key=GOOGLE_API_KEY)
-    Settings.llm = Gemini(model="models/gemini-2.0-flash-001", api_key=GOOGLE_API_KEY)
+    Settings.embed_model = GoogleGenerativeAIEmbedding(model_name="models/text-embedding-004", api_key=GOOGLE_API_KEY)
+    Settings.llm = GoogleGenerativeAI(model="models/gemini-2.0-flash-001", api_key=GOOGLE_API_KEY)
 
     db = chromadb.PersistentClient(path=CHROMA_DB_DIR)
     chroma_collection = db.get_or_create_collection(COLLECTION_NAME)
