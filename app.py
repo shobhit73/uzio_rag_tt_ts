@@ -33,70 +33,67 @@ st.markdown("""
         font-family: 'Inter', sans-serif;
     }
 
-    /* Reduce general font size for professional look */
+    /* Professional Text Styling */
     .stMarkdown, p, div {
         font-size: 15px !important;
-        color: #2D3748; /* Dark Grey */
+        color: #2D3748;
     }
 
     h1, h2, h3 {
-        color: #1A365D; /* UZIO Navy Blue */
+        color: #00A3E0; /* Cyan/Blue from Logo */
         font-weight: 700;
+        background: -webkit-linear-gradient(45deg, #00A3E0, #1A365D);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
     /* Chat Message Bubbles */
     .stChatMessage {
-        padding: 1rem;
         border-radius: 12px;
         margin-bottom: 10px;
         border: 1px solid #E2E8F0;
     }
 
     [data-testid="stChatMessage"]:nth-child(2n+1) {
-        background-color: #F7FAFC; /* Assistant bubble light grey */
+        background-color: #F8FAFC; 
     }
 
     [data-testid="stChatMessage"]:nth-child(2n) {
-        background-color: #EBF8FF; /* User bubble light blue tone */
-        border-color: #BEE3F8;
+        background-color: #E0F2F1; /* Very light cyan tint */
+        border-color: #B2DFDB;
     }
     
-    /* Button Styling - Refined */
+    /* Button Styling - Gradient Theme */
     .stButton button {
         width: 100%;
-        border-radius: 6px;
+        border-radius: 8px;
         height: 3em;
-        background-color: #ffffff; 
-        color: #2b6cb0; /* Blue text */
+        background: linear-gradient(90deg, #00A3E0 0%, #0077B6 100%); /* Cyan to Blue Gradient */
+        color: white;
         font-weight: 600;
-        border: 1px solid #2b6cb0;
-        transition: all 0.2s ease-in-out;
+        border: none;
+        transition: transform 0.1s ease;
     }
     .stButton button:hover {
-        background-color: #2b6cb0;
+        transform: scale(1.02);
         color: white;
-        border-color: #2b6cb0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     
-    /* Secondary Action Button (Clear) */
+    /* Secondary Button */
     button[kind="secondary"] {
-        background-color: transparent;
-        border: 1px solid #CBD5E0;
-        color: #718096;
+        background: transparent !important;
+        border: 1px solid #CBD5E0 !important;
+        color: #718096 !important;
+        box-shadow: none !important;
     }
 
-    /* Input Box */
-    .stChatInput {
-        padding-bottom: 20px;
+    /* Sidebar Logo Positioning */
+    [data-testid="stSidebar"] img {
+        margin-bottom: 20px;
+        border-radius: 10px; /* Slight rounding if square */
     }
     
-    /* Expander styling */
-    .stExpander {
-        background-color: #FFFFFF;
-        border-radius: 8px;
-        border: 1px solid #E2E8F0;
-        font-size: 14px;
-    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -118,8 +115,11 @@ def load_index():
 
 # Sidebar
 with st.sidebar:
-    # UZIO Logo
-    st.image("https://asset.brandfetch.io/idf3R62Zp0/id5O8A-W_c.png", width=160)
+    # UZIO Logo (Local Asset)
+    if os.path.exists("assets/logo.png"):
+        st.image("assets/logo.png", width=180)
+    else:
+        st.title("UZIO.ai")
     st.write("") # Spacer
     st.markdown("### **AI Support Assistant**")
     st.markdown("**Powered by Gemini 2.0 Flash**")
