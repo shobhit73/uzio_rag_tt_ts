@@ -36,11 +36,11 @@ st.markdown("""
     /* Reduce general font size for professional look */
     .stMarkdown, p, div {
         font-size: 15px !important;
-        color: #1A202C; /* Darker grey for text */
+        color: #2D3748; /* Dark Grey */
     }
 
     h1, h2, h3 {
-        color: #2b6cb0; /* UZIO-like Blue */
+        color: #1A365D; /* UZIO Navy Blue */
         font-weight: 700;
     }
 
@@ -61,19 +61,28 @@ st.markdown("""
         border-color: #BEE3F8;
     }
     
-    /* Button Styling */
+    /* Button Styling - Refined */
     .stButton button {
         width: 100%;
         border-radius: 6px;
-        height: 2.8em;
-        background-color: #3182CE; /* UZIO Blue */
-        color: white;
-        font-weight: 500;
-        border: none;
+        height: 3em;
+        background-color: #ffffff; 
+        color: #2b6cb0; /* Blue text */
+        font-weight: 600;
+        border: 1px solid #2b6cb0;
+        transition: all 0.2s ease-in-out;
     }
     .stButton button:hover {
-        background-color: #2C5282;
+        background-color: #2b6cb0;
         color: white;
+        border-color: #2b6cb0;
+    }
+    
+    /* Secondary Action Button (Clear) */
+    button[kind="secondary"] {
+        background-color: transparent;
+        border: 1px solid #CBD5E0;
+        color: #718096;
     }
 
     /* Input Box */
@@ -110,7 +119,7 @@ def load_index():
 # Sidebar
 with st.sidebar:
     # UZIO Logo
-    st.image("https://uzio.com/wp-content/uploads/2017/09/logo.png", width=180)
+    st.image("https://asset.brandfetch.io/idf3R62Zp0/id5O8A-W_c.png", width=160)
     st.write("") # Spacer
     st.markdown("### **AI Support Assistant**")
     st.markdown("**Powered by Gemini 2.0 Flash**")
