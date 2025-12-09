@@ -26,74 +26,78 @@ st.set_page_config(
 # Custom CSS for Professional Look
 st.markdown("""
 <style>
-    /* Global Font & Theme */
+    /* Import Font */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     
-    html, body, [class*="st-"] {
-        font-family: 'Inter', sans-serif;
+    /* Apply font to text elements only, avoiding icons */
+    html, body, .stMarkdown, .stButton, .stTextInput, .stChatInput {
+        font-family: 'Inter', sans-serif !important;
     }
 
-    /* Professional Text Styling */
-    .stMarkdown, p, div {
-        font-size: 15px !important;
-        color: #2D3748;
+    /* Professional Text Styling - High Contrast */
+    .stMarkdown p {
+        font-size: 16px !important;
+        color: #1A202C !important; /* Darker Black/Grey */
+        line-height: 1.6;
     }
-
+    
+    /* Headings */
     h1, h2, h3 {
-        color: #00A3E0; /* Cyan/Blue from Logo */
-        font-weight: 700;
-        background: -webkit-linear-gradient(45deg, #00A3E0, #1A365D);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #0077B6 !important;
+        font-weight: 700 !important;
     }
 
     /* Chat Message Bubbles */
     .stChatMessage {
         border-radius: 12px;
-        margin-bottom: 10px;
         border: 1px solid #E2E8F0;
+        padding: 1rem;
     }
 
-    [data-testid="stChatMessage"]:nth-child(2n+1) {
-        background-color: #F8FAFC; 
-    }
-
+    /* User Bubble */
     [data-testid="stChatMessage"]:nth-child(2n) {
-        background-color: #E0F2F1; /* Very light cyan tint */
-        border-color: #B2DFDB;
+        background-color: #EBF8FF;
+        border-color: #BEE3F8;
     }
     
-    /* Button Styling - Gradient Theme */
-    .stButton button {
-        width: 100%;
-        border-radius: 8px;
-        height: 3em;
-        background: linear-gradient(90deg, #00A3E0 0%, #0077B6 100%); /* Cyan to Blue Gradient */
-        color: white;
+    /* Assistant Bubble */
+    [data-testid="stChatMessage"]:nth-child(2n+1) {
+        background-color: #FFFFFF;
+        border-color: #E2E8F0;
+    }
+
+    /* Fix Expander Icon Glitch by not forcing font on everything */
+    .streamlit-expanderHeader {
+        font-family: 'Inter', sans-serif;
+        color: #2D3748;
         font-weight: 600;
+    }
+    
+    /* Button Styling */
+    .stButton button {
+        border-radius: 8px;
+        background: linear-gradient(90deg, #00A3E0 0%, #0077B6 100%);
+        color: white;
         border: none;
-        transition: transform 0.1s ease;
+        font-weight: 600;
     }
     .stButton button:hover {
-        transform: scale(1.02);
-        color: white;
+        transform: translateY(-1px);
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        color: white;
     }
     
-    /* Secondary Button */
-    button[kind="secondary"] {
-        background: transparent !important;
-        border: 1px solid #CBD5E0 !important;
-        color: #718096 !important;
-        box-shadow: none !important;
+    /* Link styling in markdown */
+    .stMarkdown a {
+        color: #3182CE !important;
+        text-decoration: none;
     }
 
-    /* Sidebar Logo Positioning */
+     /* Sidebar Logo Positioning */
     [data-testid="stSidebar"] img {
         margin-bottom: 20px;
         border-radius: 10px; 
     }
-    
 </style>
 """, unsafe_allow_html=True)
 
@@ -103,15 +107,20 @@ def load_index():
         return None
     
     # Setup Models
-    Settings.embed_model = GoogleGenAIEmbedding(model_name="models/text-embedding-004", api_key=GOOGLE_API_KEY)
-    Settings.llm = GoogleGenAI(model="models/gemini-2.0-flash-001", api_key=GOOGLE_API_KEY)
+    try:
+        Settings.embed_model = GoogleGenAIEmbedding(model_name="models/text-embedding-004", api_key=GOOGLE_API_KEY)
+        Settings.llm = GoogleGenAI(model="models/gemini-flash-latest", api_key=GOOGLE_API_KEY)
+    except Exception as e:
+        return None
 
-    db = chromadb.PersistentClient(path=CHROMA_DB_DIR)
-    chroma_collection = db.get_or_create_collection(COLLECTION_NAME)
-    vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
-    storage_context = StorageContext.from_defaults(vector_store=vector_store)
-    
-    return VectorStoreIndex.from_vector_store(vector_store, storage_context=storage_context)
+    try:
+        db = chromadb.PersistentClient(path=CHROMA_DB_DIR)
+        chroma_collection = db.get_or_create_collection(COLLECTION_NAME)
+        vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
+        storage_context = StorageContext.from_defaults(vector_store=vector_store)
+        return VectorStoreIndex.from_vector_store(vector_store, storage_context=storage_context)
+    except Exception as e:
+        return None
 
 # Sidebar
 with st.sidebar:
@@ -122,7 +131,7 @@ with st.sidebar:
         st.title("UZIO.ai")
     st.write("") # Spacer
     st.markdown("### **AI Support Assistant**")
-    st.markdown("**Powered by Gemini 2.0 Flash**")
+    st.markdown("**Powered by Gemini Flash 1.5**")
     st.markdown("---")
     st.markdown("Use this assistant to quickly find answers about UZIO Scheduling and Time Tracking modules.")
     
@@ -198,21 +207,26 @@ else:
         # Generate response
         with st.chat_message("assistant"):
             with st.spinner("Analyzing UZIO documentation..."):
-                response = chat_engine.chat(prompt)
-                st.markdown(response.response)
-                
-                # Show source nodes (especially images)
-                with st.expander("🔍 View Source Context (Text & Images)"):
-                    for node in response.source_nodes:
-                        st.markdown(f"**Score:** {node.score:.2f}")
-                        # Clean up text for display
-                        text_content = node.node.get_text().replace("Image Path:", "").strip()
-                        st.markdown(f"> {text_content[:300]}...")
-                        
-                        # Check for Image
-                        if "image_path" in node.node.metadata:
-                            img_path = node.node.metadata["image_path"]
-                            if os.path.exists(img_path):
-                                st.image(img_path, caption="Relevant Screenshot/Chart", width=400)
+                try:
+                    response = chat_engine.chat(prompt)
+                    st.markdown(response.response)
+                    
+                    # Show source nodes (especially images)
+                    with st.expander("🔍 View Source Context (Text & Images)"):
+                        if hasattr(response, 'source_nodes'):
+                            for node in response.source_nodes:
+                                st.markdown(f"**Score:** {node.score:.2f}")
+                                # Clean up text for display
+                                text_content = node.node.get_text().replace("Image Path:", "").strip()
+                                st.markdown(f"> {text_content[:300]}...")
                                 
-        st.session_state.messages.append({"role": "assistant", "content": response.response})
+                                # Check for Image
+                                if "image_path" in node.node.metadata:
+                                    img_path = node.node.metadata["image_path"]
+                                    if os.path.exists(img_path):
+                                        st.image(img_path, caption="Relevant Screenshot/Chart", width=400)
+                except Exception as e:
+                    st.error(f"An error occurred: {str(e)}")
+        
+        if 'response' in locals() and response:
+            st.session_state.messages.append({"role": "assistant", "content": response.response})

@@ -23,7 +23,7 @@ def build_index():
     # 1. Setup Models
     # Using text-embedding-004 for cost/performance if available, else 001
     Settings.embed_model = GoogleGenAIEmbedding(model_name="models/text-embedding-004", api_key=GOOGLE_API_KEY)
-    Settings.llm = GoogleGenAI(model="models/gemini-2.0-flash-001", api_key=GOOGLE_API_KEY)
+    Settings.llm = GoogleGenAI(model="models/gemini-flash-latest", api_key=GOOGLE_API_KEY)
 
     # 2. Prepare Documents
     with open(ENRICHED_DATA_FILE, "r") as f:

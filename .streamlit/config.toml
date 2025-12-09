@@ -1,2 +1,10 @@
 [server]
 folderWatchBlacklist = ['chroma_db', 'processed_data', 'data']
+
+[theme]
+base = "light"
+primaryColor = "#00A3E0"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F0F2F6"
+textColor = "#2D3748"
+font = "sans serif"
