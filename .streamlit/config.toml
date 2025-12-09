@@ -1,5 +1,6 @@
 [server]
 folderWatchBlacklist = ['chroma_db', 'processed_data', 'data']
+fileWatcherType = "none"
 
 [theme]
 base = "light"
