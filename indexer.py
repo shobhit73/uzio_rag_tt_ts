@@ -11,8 +11,10 @@ load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 # Configuration
-ENRICHED_DATA_FILE = "processed_data/enriched_content.json"
-CHROMA_DB_DIR = "chroma_db"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROCESSED_DATA_DIR = os.path.join(BASE_DIR, "processed_data")
+ENRICHED_DATA_FILE = os.path.join(PROCESSED_DATA_DIR, "enriched_content.json")
+CHROMA_DB_DIR = os.path.join(BASE_DIR, "chroma_db")
 COLLECTION_NAME = "uzio_docs"
 
 def build_index():

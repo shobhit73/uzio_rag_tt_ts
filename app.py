@@ -1,5 +1,7 @@
 import streamlit as st
 import os
+import sys
+import subprocess
 from llama_index.core import VectorStoreIndex, StorageContext, Settings
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.llms.google_genai import GoogleGenAI
@@ -116,17 +118,26 @@ def load_index():
          print(f"DEBUG: {CHROMA_DB_DIR} contents: {os.listdir(CHROMA_DB_DIR)}")
     
     if not os.path.exists(CHROMA_DB_DIR):
-        print(f"DEBUG: CHROMA_DB_DIR {CHROMA_DB_DIR} NOT FOUND at path!")
-        return None
-    
-    # Setup Models
+        print(f"DEBUG: CHROMA_DB_DIR {CHROMA_DB_DIR} NOT FOUND! Attempting to rebuild...")
+        st.warning("⚠️ Index not found. Auto-building index... This may take 1-2 minutes.")
+        
+        try:
+            # Run indexer.py as a separate process
+            indexer_path = os.path.join(BASE_DIR, "indexer.py")
+            subprocess.run([sys.executable, indexer_path], check=True)
+            print("DEBUG: Index rebuild complete.")
+            st.success("✅ Index built successfully! Reloading...")
+        except Exception as e:
+            print(f"ERROR: Failed to rebuild index: {e}")
+            st.error(f"Failed to rebuild index: {e}")
+            return None
+            
+    # Retry loading after build
     try:
+        # Setup Models (Must fail gracefully if key is missing)
         Settings.embed_model = GoogleGenAIEmbedding(model_name="models/text-embedding-004", api_key=GOOGLE_API_KEY)
         Settings.llm = GoogleGenAI(model="models/gemini-flash-latest", api_key=GOOGLE_API_KEY)
-    except Exception as e:
-        return None
-
-    try:
+        
         db = chromadb.PersistentClient(path=CHROMA_DB_DIR)
         chroma_collection = db.get_or_create_collection(COLLECTION_NAME)
         vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
