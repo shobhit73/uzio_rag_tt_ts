@@ -117,9 +117,11 @@ def load_index():
     if os.path.exists(CHROMA_DB_DIR):
          print(f"DEBUG: {CHROMA_DB_DIR} contents: {os.listdir(CHROMA_DB_DIR)}")
     
-    if not os.path.exists(CHROMA_DB_DIR):
-        print(f"DEBUG: CHROMA_DB_DIR {CHROMA_DB_DIR} NOT FOUND! Attempting to rebuild...")
-        st.warning("⚠️ Index not found. Auto-building index... This may take 1-2 minutes.")
+    # Strict check: Does the SQLite file exist?
+    sqlite_path = os.path.join(CHROMA_DB_DIR, "chroma.sqlite3")
+    if not os.path.exists(CHROMA_DB_DIR) or not os.path.exists(sqlite_path):
+        print(f"DEBUG: CHROMA_DB_DIR or sqlite3 missing at {CHROMA_DB_DIR}! Attempting to rebuild...")
+        st.warning(f"⚠️ Index not found at {CHROMA_DB_DIR}. Auto-building index... This may take 1-2 minutes.")
         
         try:
             # Run indexer.py as a separate process
@@ -144,6 +146,8 @@ def load_index():
         storage_context = StorageContext.from_defaults(vector_store=vector_store)
         return VectorStoreIndex.from_vector_store(vector_store, storage_context=storage_context)
     except Exception as e:
+        print(f"CRITICAL ERROR LOADING INDEX: {e}")
+        st.error(f"System Error: Failed to load database. Details: {str(e)}")
         return None
 
 # Sidebar
