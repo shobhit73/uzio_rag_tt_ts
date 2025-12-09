@@ -8,10 +8,11 @@ Streamlit Cloud can sometimes struggle with large applications or file limits (`
 2.  Click **"Create new Space"**.
 3.  **Space Name**: `uzio-rag-assistant` (or similar).
 4.  **License**: `MIT` (optional).
-5.  **Select the Space SDK**: Choose **Streamlit**.
-6.  **Space Hardware**: Keep it on **CPU Basic (Free)**.
-7.  **Visibility**: Public or Private (your choice).
-8.  Click **"Create Space"**.
+5.  **Select the Space SDK**: Choose **Docker**.
+6.  **Choose a Docker template**: Select **Blank**.
+7.  **Space Hardware**: Keep it on **CPU Basic (Free)**.
+8.  **Visibility**: Public or Private (your choice).
+9.  Click **"Create Space"**.
 
 ## Step 2: Connect Code
 
