@@ -12,8 +12,15 @@ load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 # Configuration
-CHROMA_DB_DIR = "chroma_db"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CHROMA_DB_DIR = os.path.join(BASE_DIR, "chroma_db")
 COLLECTION_NAME = "uzio_docs"
+
+# Debug Config
+import sqlite3
+print(f"DEBUG: SQLite Version: {sqlite3.sqlite_version}")
+print(f"DEBUG: Base Directory: {BASE_DIR}")
+print(f"DEBUG: Target Chroma DB Path: {CHROMA_DB_DIR}")
 
 # Page Config
 st.set_page_config(
