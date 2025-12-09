@@ -208,6 +208,8 @@ else:
         with st.chat_message("assistant"):
             with st.spinner("Analyzing UZIO documentation..."):
                 try:
+                    # Debug print for Cloud logs
+                    print(f"DEBUG: Querying LLM with model {Settings.llm.model}...")
                     response = chat_engine.chat(prompt)
                     st.markdown(response.response)
                     
