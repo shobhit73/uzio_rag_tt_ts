@@ -3,8 +3,7 @@ title: UZIO AI Support Assistant
 emoji: 🤖
 colorFrom: blue
 colorTo: cyan
-sdk: streamlit
-sdk_version: 1.42.0
+sdk: docker
 app_file: app.py
 pinned: false
 ---
