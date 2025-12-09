@@ -103,7 +103,13 @@ st.markdown("""
 
 @st.cache_resource
 def load_index():
+    print(f"DEBUG: Current Directory: {os.getcwd()}")
+    print(f"DEBUG: Files in CWD: {os.listdir(os.getcwd())}")
+    if os.path.exists(CHROMA_DB_DIR):
+         print(f"DEBUG: {CHROMA_DB_DIR} contents: {os.listdir(CHROMA_DB_DIR)}")
+    
     if not os.path.exists(CHROMA_DB_DIR):
+        print(f"DEBUG: CHROMA_DB_DIR {CHROMA_DB_DIR} NOT FOUND at path!")
         return None
     
     # Setup Models
