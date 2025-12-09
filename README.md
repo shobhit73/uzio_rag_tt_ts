@@ -1,3 +1,14 @@
+---
+title: UZIO AI Support Assistant
+emoji: 🤖
+colorFrom: blue
+colorTo: cyan
+sdk: streamlit
+sdk_version: 1.42.0
+app_file: app.py
+pinned: false
+---
+
 # UZIO Local RAG Assistant 🤖
 
 A powerful, local Retrieval-Augmented Generation (RAG) agent designed to answer questions about UZIO's Scheduling and Time Tracking modules. This application processes complex DOCX documentation, including charts and screenshots, to provide accurate, context-aware answers.
